@@ -1,1 +1,7 @@
-
+{
+  "mappings": [
+    "/content/cintas-demo/:/",
+    "/content/cintas-demo/metadata:/metadata.json",
+    "/content/cintas-demo/configuration:/.helix/config.json"
+  ]
+}
