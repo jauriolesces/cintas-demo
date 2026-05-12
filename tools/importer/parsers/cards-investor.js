@@ -12,30 +12,39 @@
  * Each card has: icon image (.icon-card__icon), title (h3.icon-card__title),
  * description (div.icon-card__text), and link (a.icon-card__link).
  *
+ * Images use lazy loading via data-mediasrc attribute instead of src.
+ *
  * UE Model (card): image (reference), text (richtext)
  * Container block: each card item = one row with 2 columns (image | text)
  */
 export default function parse(element, { document }) {
-  // Find all icon-card elements within the investor section
   const iconCards = element.querySelectorAll('.icon-card');
 
   const cells = [];
 
   iconCards.forEach((card) => {
     // Column 1: Icon image with field hint
-    // Images may use lazy loading with data-mediasrc instead of src
     const iconImg = card.querySelector('img.icon-card__icon, img[class*="icon-card__icon"]');
     const imageCell = document.createDocumentFragment();
+
     if (iconImg) {
-      // Resolve lazy-loaded image src from data-mediasrc or data-src
-      if (!iconImg.getAttribute('src') || iconImg.getAttribute('src') === '') {
-        const lazySrc = iconImg.getAttribute('data-mediasrc') || iconImg.getAttribute('data-src') || '';
-        if (lazySrc) {
-          iconImg.setAttribute('src', lazySrc);
-        }
+      // Resolve lazy-loaded image: check data-mediasrc, data-src, srcset
+      const lazySrc = iconImg.getAttribute('data-mediasrc')
+        || iconImg.getAttribute('data-src')
+        || iconImg.getAttribute('srcset')
+        || iconImg.getAttribute('src');
+
+      if (lazySrc && lazySrc !== '') {
+        const newImg = document.createElement('img');
+        newImg.src = lazySrc;
+        newImg.alt = iconImg.alt || '';
+        imageCell.appendChild(document.createComment(' field:image '));
+        const p = document.createElement('p');
+        const picture = document.createElement('picture');
+        picture.appendChild(newImg);
+        p.appendChild(picture);
+        imageCell.appendChild(p);
       }
-      imageCell.appendChild(document.createComment(' field:image '));
-      imageCell.appendChild(iconImg);
     }
 
     // Column 2: Title + description + link as richtext with field hint
@@ -44,26 +53,25 @@ export default function parse(element, { document }) {
     const link = card.querySelector('a.icon-card__link, .icon-card__link');
 
     const textCell = document.createDocumentFragment();
-    let hasTextContent = false;
+    textCell.appendChild(document.createComment(' field:text '));
 
     if (title) {
-      hasTextContent = true;
-      textCell.appendChild(document.createComment(' field:text '));
-      textCell.appendChild(title);
+      const h3 = document.createElement('h3');
+      h3.textContent = title.textContent.trim();
+      textCell.appendChild(h3);
     }
     if (description) {
-      if (!hasTextContent) {
-        textCell.appendChild(document.createComment(' field:text '));
-        hasTextContent = true;
-      }
-      textCell.appendChild(description);
+      const p = document.createElement('p');
+      p.textContent = description.textContent.trim();
+      textCell.appendChild(p);
     }
     if (link) {
-      if (!hasTextContent) {
-        textCell.appendChild(document.createComment(' field:text '));
-        hasTextContent = true;
-      }
-      textCell.appendChild(link);
+      const p = document.createElement('p');
+      const a = document.createElement('a');
+      a.href = link.href;
+      a.textContent = link.textContent.trim();
+      p.appendChild(a);
+      textCell.appendChild(p);
     }
 
     cells.push([imageCell, textCell]);
