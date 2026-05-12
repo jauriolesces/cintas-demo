@@ -1,0 +1,39 @@
+{
+  "variantName": "cards-investor",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-05-11T23:20:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.cintas.com/",
+    "originPage": "Cintas homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "minimal",
+    "purpose": "investor-news",
+    "imagePattern": "icon"
+  },
+  "contentPattern": {
+    "structure": "icon + title + description + link",
+    "buttonCount": 0,
+    "imageCount": 2
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "investor relations news items",
+      "press release listings with icons",
+      "news/announcement cards with small icons"
+    ],
+    "notSuitableFor": [
+      "image-heavy card grids",
+      "product or service showcases",
+      "card layouts requiring large images"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-05-11T23:20:00.000Z"
+  }
+}

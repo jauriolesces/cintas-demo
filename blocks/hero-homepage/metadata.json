@@ -1,0 +1,39 @@
+{
+  "variantName": "hero-homepage",
+  "baseBlock": "hero",
+  "version": "1.0.0",
+  "created": "2026-05-11T23:20:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.cintas.com/",
+    "originPage": "Cintas homepage",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "dark",
+    "density": "minimal",
+    "purpose": "homepage-hero",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "heading",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "homepage hero banners",
+      "landing pages with prominent background images",
+      "pages needing strong visual impact with minimal text"
+    ],
+    "notSuitableFor": [
+      "product detail pages",
+      "pages requiring multiple CTAs in hero",
+      "text-heavy hero sections"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-05-11T23:20:00.000Z"
+  }
+}

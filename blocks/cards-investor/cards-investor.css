@@ -1,0 +1,199 @@
+/* === Cards Investor — full investor section === */
+
+/* --- Heading wrapper (before the block): white full-bleed --- */
+main > .section > .default-content-wrapper:has(+ .cards-investor-wrapper) {
+  max-width: unset;
+  margin: 0 -32px;
+  padding: 60px 32px 24px;
+  background-color: var(--color-white);
+}
+
+.default-content-wrapper:has(+ .cards-investor-wrapper) h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-navy);
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+
+/* --- Wrapper: white full-bleed panel --- */
+main > .section > .cards-investor-wrapper {
+  max-width: unset;
+  margin: 0 -32px;
+  background-color: var(--color-white);
+  padding: 0 32px 40px;
+}
+
+/* --- Block --- */
+.cards-investor {
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Card list: vertical stack --- */
+.cards-investor > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- Individual card: white box with shadow --- */
+.cards-investor > ul > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--color-white);
+  padding: 32px 56px 32px 40px;
+  border: none;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+/* Icon column */
+.cards-investor .cards-investor-card-image {
+  flex-shrink: 0;
+  width: 48px;
+  line-height: 0;
+}
+
+.cards-investor > ul > li img {
+  width: 48px;
+  height: 48px;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+/* Hide empty first body div (icon placeholder) */
+.cards-investor > ul > li > .cards-investor-card-body:first-child:empty {
+  display: none;
+}
+
+/* --- Card text --- */
+.cards-investor .cards-investor-card-body {
+  margin: 0;
+}
+
+.cards-investor .cards-investor-card-body h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 8px;
+  text-transform: none;
+  line-height: 1.3;
+}
+
+.cards-investor .cards-investor-card-body p {
+  font-size: 14px;
+  color: var(--color-gray-text);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+/* --- Card links: plain text, override AEM button decoration --- */
+.cards-investor .cards-investor-card-body a,
+.cards-investor .cards-investor-card-body a.button {
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline;
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  box-shadow: none;
+  white-space: normal;
+  line-height: inherit;
+  margin: 0;
+}
+
+.cards-investor .cards-investor-card-body a:hover,
+.cards-investor .cards-investor-card-body a.button:hover {
+  color: var(--color-red);
+  text-decoration: underline;
+  background: none;
+}
+
+.cards-investor .cards-investor-card-body .button-container {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- CTA + background image (after the block) --- */
+main > .section > .cards-investor-wrapper + .default-content-wrapper {
+  max-width: unset;
+  margin: 0 -32px;
+  padding: 24px 32px 60px;
+  background-color: var(--color-white);
+  position: relative;
+  overflow: visible;
+}
+
+/* CTA button */
+.cards-investor-wrapper + .default-content-wrapper .button-container {
+  position: relative;
+  z-index: 1;
+}
+
+.cards-investor-wrapper + .default-content-wrapper a.button {
+  background-color: var(--button-bg);
+  color: var(--color-white);
+  padding: 18px 48px;
+  border-radius: var(--button-border-radius);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cards-investor-wrapper + .default-content-wrapper a.button:hover {
+  background-color: var(--button-bg-hover);
+}
+
+/* Background image — right side */
+.cards-investor-wrapper + .default-content-wrapper > p:last-child {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 50%;
+  margin: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.cards-investor-wrapper + .default-content-wrapper > p:last-child picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cards-investor-wrapper + .default-content-wrapper > p:last-child img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* --- Desktop --- */
+@media (width >= 900px) {
+  .cards-investor > ul {
+    max-width: 50%;
+  }
+
+  .cards-investor .cards-investor-card-body h3 {
+    font-size: 24px;
+  }
+
+  .default-content-wrapper:has(+ .cards-investor-wrapper) h2 {
+    font-size: 32px;
+  }
+}

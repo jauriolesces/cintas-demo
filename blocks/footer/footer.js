@@ -1,20 +1,31 @@
 import { getMetadata } from '../../scripts/aem.js';
-import { loadFragment } from '../fragment/fragment.js';
 
-/**
- * loads and decorates the footer
- * @param {Element} block The footer block element
- */
 export default async function decorate(block) {
-  // load footer as fragment
   const footerMeta = getMetadata('footer');
-  const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : '/footer';
-  const fragment = await loadFragment(footerPath);
+  const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : '/content/footer';
+  const resp = await fetch(`${footerPath}.plain.html`);
+  if (!resp.ok) return;
 
-  // decorate footer DOM
+  const html = await resp.text();
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+
   block.textContent = '';
   const footer = document.createElement('div');
-  while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
+
+  // Extract content divs from wrapper, skipping any stray head elements
+  let contentDivs = [...temp.querySelectorAll(':scope > div > div')];
+  if (contentDivs.length < 2) {
+    contentDivs = [...temp.querySelectorAll(':scope > div')];
+  }
+  contentDivs.forEach((div) => footer.append(div));
+
+  // Strip button classes from footer links
+  footer.querySelectorAll('.button-container').forEach((bc) => {
+    bc.classList.remove('button-container');
+    const btn = bc.querySelector('.button');
+    if (btn) btn.classList.remove('button');
+  });
 
   block.append(footer);
 }

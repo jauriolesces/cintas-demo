@@ -1,0 +1,39 @@
+{
+  "variantName": "cards-solutions",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-05-11T23:20:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.cintas.com/",
+    "originPage": "Cintas homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "solutions",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "image + title + description + link",
+    "buttonCount": 0,
+    "imageCount": 8
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "service/solution overview grids",
+      "product category cards with images",
+      "feature showcase pages with 4+ items"
+    ],
+    "notSuitableFor": [
+      "small card sets (1-2 items)",
+      "icon-only card layouts",
+      "text-heavy news/article listings"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-05-11T23:20:00.000Z"
+  }
+}

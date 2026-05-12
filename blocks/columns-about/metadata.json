@@ -1,0 +1,39 @@
+{
+  "variantName": "columns-about",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-05-11T23:20:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.cintas.com/",
+    "originPage": "Cintas homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "about",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "image/video + heading + paragraphs + CTA",
+    "buttonCount": 1,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "about us sections with media and text",
+      "company overview layouts",
+      "two-column media + text content sections"
+    ],
+    "notSuitableFor": [
+      "multi-row column layouts",
+      "three or more column layouts",
+      "image gallery layouts"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-05-11T23:20:00.000Z"
+  }
+}

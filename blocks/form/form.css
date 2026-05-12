@@ -62,7 +62,7 @@
   margin: 0;
   padding: 0.5em;
   border-radius: 4px;
-  border: 1px solid var(--dark-color);
+  border: 1px solid #ccc;
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: var(--body-font-size-s);
@@ -167,4 +167,148 @@
 
 .form .toggle-wrapper input:checked + .slider::before {
   transform: translateX(24px);
+}
+
+/* === Form section layout (contact form + side card + bg image) === */
+
+/* Heading before form block */
+.form-container > .default-content-wrapper:first-child h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-navy);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.form-container > .default-content-wrapper:first-child p {
+  font-size: 14px;
+  color: var(--color-gray-text);
+  margin: 0 0 24px;
+}
+
+/* Placeholder when form JSON is unavailable */
+.form.form-placeholder {
+  min-height: 200px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  margin-bottom: 24px;
+}
+
+.form-placeholder-content p {
+  color: var(--color-gray-text);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Section needs relative positioning for the bg image */
+.form-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.form-container > .form-wrapper,
+.form-container > .default-content-wrapper:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+/* "Have a Question?" card + background image wrapper */
+.form-container > .form-wrapper + .default-content-wrapper {
+  position: static;
+  z-index: 1;
+}
+
+/* Red card: h3 + button — positioned top-right on desktop */
+.form-container > .form-wrapper + .default-content-wrapper h3 {
+  background-color: var(--color-red);
+  color: var(--color-white);
+  padding: 32px 32px 16px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 24px 0 0;
+  max-width: 300px;
+}
+
+.form-container > .form-wrapper + .default-content-wrapper .button-container {
+  background-color: var(--color-red);
+  padding: 0 32px 32px;
+  margin: 0 0 24px;
+  display: block;
+  max-width: 300px;
+}
+
+.form-container > .form-wrapper + .default-content-wrapper a.button {
+  background: none;
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.form-container > .form-wrapper + .default-content-wrapper a.button:hover {
+  background: var(--color-white);
+  color: var(--color-red);
+}
+
+/* Background image — positioned on the right side */
+.form-container > .form-wrapper + .default-content-wrapper > p:last-child {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  margin: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.form-container > .form-wrapper + .default-content-wrapper > p:last-child picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.form-container > .form-wrapper + .default-content-wrapper > p:last-child img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (width >= 900px) {
+  .form-container > .form-wrapper {
+    max-width: 55%;
+  }
+
+  .form-container > .default-content-wrapper:first-child h2 {
+    font-size: 32px;
+  }
+
+  .form-container > .form-wrapper + .default-content-wrapper h3 {
+    position: absolute;
+    top: 80px;
+    left: 56%;
+    z-index: 2;
+    width: 280px;
+    margin: 0;
+    padding: 32px 32px 16px;
+  }
+
+  .form-container > .form-wrapper + .default-content-wrapper .button-container {
+    position: absolute;
+    top: 200px;
+    left: 56%;
+    z-index: 2;
+    width: 280px;
+    margin: 0;
+    padding: 0 32px 32px;
+  }
 }

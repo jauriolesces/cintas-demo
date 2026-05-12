@@ -1,0 +1,115 @@
+{
+  "metadata": {
+    "projectType": "xwalk"
+  },
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": [
+        "https://www.cintas.com/"
+      ],
+      "description": "Cintas corporate homepage with hero, services, and promotional content",
+      "blocks": [
+        {
+          "name": "hero-homepage",
+          "instances": [
+            ".card-hero.card-hero--wide.homepage"
+          ]
+        },
+        {
+          "name": "cards-solutions",
+          "instances": [
+            ".solution-grid"
+          ]
+        },
+        {
+          "name": "columns-about",
+          "instances": [
+            ".section--about-us"
+          ]
+        },
+        {
+          "name": "cards-investor",
+          "instances": [
+            ".card-section.card-section--investor-information"
+          ]
+        },
+        {
+          "name": "form",
+          "instances": [
+            ".card-section.card-section--new-services form"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1-announcement",
+          "name": "Announcement Banner",
+          "selector": ".background-color-280.box-shadow",
+          "style": "dark-blue",
+          "blocks": [],
+          "defaultContent": [
+            ".background-color-280.box-shadow .content-block p"
+          ]
+        },
+        {
+          "id": "section-2-hero",
+          "name": "Hero",
+          "selector": ".card-hero.card-hero--wide.homepage",
+          "style": null,
+          "blocks": [
+            "hero-homepage"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-3-solutions",
+          "name": "Solutions Grid",
+          "selector": "#Main_C002_Col00.background-light-gray",
+          "style": "light-grey",
+          "blocks": [
+            "cards-solutions"
+          ],
+          "defaultContent": [
+            "#Main_C016_Col00 .content-block h2"
+          ]
+        },
+        {
+          "id": "section-4-about",
+          "name": "About Us",
+          "selector": ".section--about-us",
+          "style": null,
+          "blocks": [
+            "columns-about"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-5-investor",
+          "name": "Investor Information",
+          "selector": ".card-section.card-section--investor-information",
+          "style": null,
+          "blocks": [
+            "cards-investor"
+          ],
+          "defaultContent": [
+            ".card-section--investor-information .content-block h2",
+            ".card-section--investor-information .content-block a.button"
+          ]
+        },
+        {
+          "id": "section-6-contact",
+          "name": "Contact / New Services",
+          "selector": "#Main_C062_Col00.background-light-gray",
+          "style": "light-grey",
+          "blocks": [
+            "form"
+          ],
+          "defaultContent": [
+            ".card-section--new-services .background-white .content-block"
+          ]
+        }
+      ]
+    }
+  ]
+}
