@@ -18,7 +18,9 @@ function embedYoutube(url, autoplay, background) {
       loop: background ? '1' : '0',
       playsinline: background ? '1' : '0',
     };
-    suffix = `&${Object.entries(suffixParams).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')}`;
+    suffix = `&${Object.entries(suffixParams)
+      .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+      .join('&')}`;
   }
   let vid = usp.get('v') ? encodeURIComponent(usp.get('v')) : '';
   const embed = url.pathname;
@@ -42,7 +44,9 @@ function embedVimeo(url, autoplay, background) {
       autoplay: autoplay ? '1' : '0',
       background: background ? '1' : '0',
     };
-    suffix = `?${Object.entries(suffixParams).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')}`;
+    suffix = `?${Object.entries(suffixParams)
+      .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+      .join('&')}`;
   }
   const temp = document.createElement('div');
   temp.innerHTML = `<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;">
