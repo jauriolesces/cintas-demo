@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "url": "https://www.cintas.com/",
+  "path": "index",
+  "timestamp": "2026-05-11T23:32:24.595Z",
+  "title": "Uniforms - Corporate Apparel | Cintas",
+  "template": "homepage",
+  "blocks": [
+    "hero-homepage",
+    "cards-solutions",
+    "columns-about",
+    "cards-investor",
+    "form"
+  ]
+}

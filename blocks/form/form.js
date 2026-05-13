@@ -81,7 +81,15 @@ export default async function decorate(block) {
   const links = [...block.querySelectorAll('a')].map((a) => a.href);
   const formLink = links.find((link) => link.startsWith(window.location.origin) && link.endsWith('.json'));
   const submitLink = links.find((link) => link !== formLink);
-  if (!formLink || !submitLink) return;
+  if (!formLink || !submitLink) {
+    block.classList.add('form-placeholder');
+    block.textContent = '';
+    const placeholder = document.createElement('div');
+    placeholder.className = 'form-placeholder-content';
+    placeholder.innerHTML = '<p>Contact form will be available after publishing.</p>';
+    block.append(placeholder);
+    return;
+  }
 
   const form = await createForm(formLink, submitLink);
   block.replaceChildren(form);
