@@ -1,7 +1,6 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
 
-// media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
 function closeOnEscape(e) {
@@ -10,11 +9,9 @@ function closeOnEscape(e) {
     const navSections = nav.querySelector('.nav-sections');
     const navSectionExpanded = navSections?.querySelector('[aria-expanded="true"]');
     if (navSectionExpanded && isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
       toggleAllNavSections(navSections);
       navSectionExpanded.focus();
     } else if (!isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
       toggleMenu(nav, navSections);
       nav.querySelector('button').focus();
     }
@@ -27,10 +24,8 @@ function closeOnFocusLost(e) {
     const navSections = nav.querySelector('.nav-sections');
     const navSectionExpanded = navSections?.querySelector('[aria-expanded="true"]');
     if (navSectionExpanded && isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
       toggleAllNavSections(navSections, false);
     } else if (!isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
       toggleMenu(nav, navSections, false);
     }
   }
@@ -41,7 +36,6 @@ function openOnKeydown(e) {
   const isNavDrop = focused.className === 'nav-drop';
   if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
     const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
-    // eslint-disable-next-line no-use-before-define
     toggleAllNavSections(focused.closest('.nav-sections'));
     focused.setAttribute('aria-expanded', dropExpanded ? 'false' : 'true');
   }
@@ -80,7 +74,6 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
       drop.removeEventListener('focus', focusNavSection);
     });
   }
-
   if (!expanded || isDesktop.matches) {
     window.addEventListener('keydown', closeOnEscape);
     nav.addEventListener('focusout', closeOnFocusLost);
@@ -92,9 +85,7 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
 
 function getDirectTextContent(menuItem) {
   const menuLink = menuItem.querySelector(':scope > :where(a,p)');
-  if (menuLink) {
-    return menuLink.textContent.trim();
-  }
+  if (menuLink) return menuLink.textContent.trim();
   return Array.from(menuItem.childNodes)
     .filter((n) => n.nodeType === Node.TEXT_NODE)
     .map((n) => n.textContent)
@@ -103,9 +94,7 @@ function getDirectTextContent(menuItem) {
 
 async function buildBreadcrumbsFromNavTree(nav, currentUrl) {
   const crumbs = [];
-
   const homeUrl = document.querySelector('.nav-brand a[href]')?.href;
-
   let menuItem = Array.from(nav.querySelectorAll('a')).find((a) => a.href === currentUrl);
   if (menuItem) {
     do {
@@ -116,15 +105,10 @@ async function buildBreadcrumbsFromNavTree(nav, currentUrl) {
   } else if (homeUrl && currentUrl !== homeUrl) {
     crumbs.unshift({ title: getMetadata('og:title'), url: currentUrl });
   }
-
   const placeholders = await fetchPlaceholders();
   const homePlaceholder = placeholders.breadcrumbsHomeLabel || 'Home';
-
   crumbs.unshift({ title: homePlaceholder, url: homeUrl || '/' });
-
-  if (crumbs.length > 1) {
-    crumbs[crumbs.length - 1].url = null;
-  }
+  if (crumbs.length > 1) crumbs[crumbs.length - 1].url = null;
   crumbs[crumbs.length - 1]['aria-current'] = 'page';
   return crumbs;
 }
@@ -132,9 +116,7 @@ async function buildBreadcrumbsFromNavTree(nav, currentUrl) {
 async function buildBreadcrumbs() {
   const breadcrumbs = document.createElement('nav');
   breadcrumbs.className = 'breadcrumbs';
-
   const crumbs = await buildBreadcrumbsFromNavTree(document.querySelector('.nav-sections'), document.location.href);
-
   const ol = document.createElement('ol');
   ol.append(...crumbs.map((item) => {
     const li = document.createElement('li');
@@ -149,13 +131,15 @@ async function buildBreadcrumbs() {
     }
     return li;
   }));
-
   breadcrumbs.append(ol);
   return breadcrumbs;
 }
 
 async function fetchNav(navPath) {
-  const resp = await fetch(`${navPath}.plain.html`);
+  let resp = await fetch(`${navPath}.plain.html`);
+  if (!resp.ok) {
+    resp = await fetch('/nav.plain.html');
+  }
   if (!resp.ok) return null;
   const html = await resp.text();
   const temp = document.createElement('div');
@@ -173,17 +157,39 @@ export default async function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'nav';
 
-  // Find the content divs — handle both wrapped and flat structures
+  // Try structured format first (local dev: 3 inner divs)
   let contentDivs = [...navContent.querySelectorAll(':scope > div > div')];
-  if (contentDivs.length < 3) {
-    contentDivs = [...navContent.querySelectorAll(':scope > div')];
-  }
+  if (contentDivs.length >= 3) {
+    const classes = ['brand', 'sections', 'tools'];
+    contentDivs.forEach((div, i) => {
+      if (classes[i]) div.classList.add(`nav-${classes[i]}`);
+      nav.append(div);
+    });
+  } else {
+    // Flat format (published site: single div with p + ul + ul)
+    const root = navContent.querySelector(':scope > div') || navContent;
+    const brandDiv = document.createElement('div');
+    brandDiv.classList.add('nav-brand');
+    const sectionsDiv = document.createElement('div');
+    sectionsDiv.classList.add('nav-sections');
+    const toolsDiv = document.createElement('div');
+    toolsDiv.classList.add('nav-tools');
 
-  const classes = ['brand', 'sections', 'tools'];
-  contentDivs.forEach((div, i) => {
-    if (classes[i]) div.classList.add(`nav-${classes[i]}`);
-    nav.append(div);
-  });
+    const uls = root.querySelectorAll(':scope > ul');
+    // Brand: everything before the first <ul>
+    [...root.children].forEach((child) => {
+      if (child.tagName === 'UL') return;
+      if (!uls[0] || child.compareDocumentPosition(uls[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+        brandDiv.append(child);
+      }
+    });
+    // Sections: first <ul>
+    if (uls[0]) sectionsDiv.append(uls[0]);
+    // Tools: second <ul>
+    if (uls[1]) toolsDiv.append(uls[1]);
+
+    nav.append(brandDiv, sectionsDiv, toolsDiv);
+  }
 
   const navBrand = nav.querySelector('.nav-brand');
   if (navBrand) {
@@ -222,7 +228,6 @@ export default async function decorate(block) {
     });
   }
 
-  // hamburger for mobile
   const hamburger = document.createElement('div');
   hamburger.classList.add('nav-hamburger');
   hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
