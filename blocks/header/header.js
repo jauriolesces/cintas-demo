@@ -136,7 +136,10 @@ async function buildBreadcrumbs() {
 }
 
 async function fetchNav(navPath) {
-  const resp = await fetch(`${navPath}.plain.html`);
+  let resp = await fetch(`${navPath}.plain.html`);
+  if (!resp.ok) {
+    resp = await fetch('/nav.plain.html');
+  }
   if (!resp.ok) return null;
   const html = await resp.text();
   const temp = document.createElement('div');
@@ -146,7 +149,7 @@ async function fetchNav(navPath) {
 
 export default async function decorate(block) {
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/content/nav';
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
   const navContent = await fetchNav(navPath);
   if (!navContent) return;
 
@@ -154,16 +157,39 @@ export default async function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'nav';
 
+  // Try structured format first (local dev: 3 inner divs)
   let contentDivs = [...navContent.querySelectorAll(':scope > div > div')];
-  if (contentDivs.length < 3) {
-    contentDivs = [...navContent.querySelectorAll(':scope > div')];
-  }
+  if (contentDivs.length >= 3) {
+    const classes = ['brand', 'sections', 'tools'];
+    contentDivs.forEach((div, i) => {
+      if (classes[i]) div.classList.add(`nav-${classes[i]}`);
+      nav.append(div);
+    });
+  } else {
+    // Flat format (published site: single div with p + ul + ul)
+    const root = navContent.querySelector(':scope > div') || navContent;
+    const brandDiv = document.createElement('div');
+    brandDiv.classList.add('nav-brand');
+    const sectionsDiv = document.createElement('div');
+    sectionsDiv.classList.add('nav-sections');
+    const toolsDiv = document.createElement('div');
+    toolsDiv.classList.add('nav-tools');
 
-  const classes = ['brand', 'sections', 'tools'];
-  contentDivs.forEach((div, i) => {
-    if (classes[i]) div.classList.add(`nav-${classes[i]}`);
-    nav.append(div);
-  });
+    const uls = root.querySelectorAll(':scope > ul');
+    // Brand: everything before the first <ul>
+    [...root.children].forEach((child) => {
+      if (child.tagName === 'UL') return;
+      if (!uls[0] || child.compareDocumentPosition(uls[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+        brandDiv.append(child);
+      }
+    });
+    // Sections: first <ul>
+    if (uls[0]) sectionsDiv.append(uls[0]);
+    // Tools: second <ul>
+    if (uls[1]) toolsDiv.append(uls[1]);
+
+    nav.append(brandDiv, sectionsDiv, toolsDiv);
+  }
 
   const navBrand = nav.querySelector('.nav-brand');
   if (navBrand) {
