@@ -165,7 +165,7 @@ async function fetchNav(navPath) {
 
 export default async function decorate(block) {
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/content/nav';
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
   const navContent = await fetchNav(navPath);
   if (!navContent) return;
 
