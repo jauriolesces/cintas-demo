@@ -155,7 +155,6 @@ function setup() {
 /**
  * Auto initialization.
  */
-
 function init() {
   setup();
   sampleRUM.collectBaseURL = window.origin;
@@ -515,6 +514,43 @@ function decorateSections(main) {
 }
 
 /**
+ * Gets placeholders object.
+ * @param {string} [prefix] Location of placeholders
+ * @returns {object} Window placeholders object
+ */
+async function fetchPlaceholders(prefix = 'default') {
+  window.placeholders = window.placeholders || {};
+  if (!window.placeholders[prefix]) {
+    window.placeholders[prefix] = new Promise((resolve) => {
+      fetch(`${prefix === 'default' ? '' : prefix}/placeholders.json`)
+        .then((resp) => {
+          if (resp.ok) {
+            // Clone the response before reading
+            return resp.clone().json();
+          }
+          return {};
+        })
+        .then((json) => {
+          const placeholders = {};
+          json.data
+            ?.filter((placeholder) => placeholder.Key)
+            .forEach((placeholder) => {
+              placeholders[toCamelCase(placeholder.Key)] = placeholder.Text;
+            });
+          window.placeholders[prefix] = placeholders;
+          resolve(window.placeholders[prefix]);
+        })
+        .catch((error) => {
+          console.error('Error loading placeholders:', error);
+          window.placeholders[prefix] = {};
+          resolve(window.placeholders[prefix]);
+        });
+    });
+  }
+  return window.placeholders[`${prefix}`];
+}
+
+/**
  * Builds a block DOM Element from a two dimensional array, string, or object
  * @param {string} blockName name of the block
  * @param {*} content two dimensional array or string or object of content
@@ -580,6 +616,44 @@ async function loadBlock(block) {
     block.dataset.blockStatus = 'loaded';
   }
   return block;
+}
+
+/**
+ * Updates all section status in a container element.
+ * @param {Element} main The container element
+ */
+function updateSectionsStatus(main) {
+  const sections = [...main.querySelectorAll(':scope > div.section')];
+  for (let i = 0; i < sections.length; i += 1) {
+    const section = sections[i];
+    const status = section.dataset.sectionStatus;
+    if (status !== 'loaded') {
+      const loadingBlock = section.querySelector(
+        '.block[data-block-status="initialized"], .block[data-block-status="loading"]',
+      );
+      if (loadingBlock) {
+        section.dataset.sectionStatus = 'loading';
+        break;
+      } else {
+        section.dataset.sectionStatus = 'loaded';
+        section.style.display = null;
+      }
+    }
+  }
+}
+
+/**
+ * Loads JS and CSS for all blocks in a container element.
+ * @param {Element} main The container element
+ */
+async function loadBlocks(main) {
+  updateSectionsStatus(main);
+  const blocks = [...main.querySelectorAll('div.block')];
+  for (let i = 0; i < blocks.length; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    await loadBlock(blocks[i]);
+    updateSectionsStatus(main);
+  }
 }
 
 /**
@@ -655,7 +729,6 @@ async function waitForFirstImage(section) {
  * Loads all blocks in a section.
  * @param {Element} section The section element
  */
-
 async function loadSection(section, loadCallback) {
   const status = section.dataset.sectionStatus;
   if (!status || status === 'initialized') {
@@ -675,7 +748,6 @@ async function loadSection(section, loadCallback) {
  * Loads all sections.
  * @param {Element} element The parent element of sections to load
  */
-
 async function loadSections(element) {
   const sections = [...element.querySelectorAll('div.section')];
   for (let i = 0; i < sections.length; i += 1) {
@@ -698,14 +770,17 @@ export {
   decorateIcons,
   decorateSections,
   decorateTemplateAndTheme,
+  fetchPlaceholders,
   getMetadata,
   loadBlock,
+  loadBlocks,
   loadCSS,
   loadFooter,
   loadHeader,
   loadScript,
   loadSection,
   loadSections,
+  updateSectionsStatus,
   readBlockConfig,
   sampleRUM,
   setup,
