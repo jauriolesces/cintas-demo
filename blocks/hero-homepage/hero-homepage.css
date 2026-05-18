@@ -27,6 +27,22 @@ main > .section.hero-homepage-container > .hero-homepage-wrapper {
   overflow: hidden;
 }
 
+/* Blue overlay gradient — navy on left, transparent middle, navy on right */
+.hero-homepage > div:first-child::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgb(1 33 105) 0%,
+    rgb(1 33 105) 25%,
+    rgb(1 33 105 / 0%) 50%,
+    rgb(1 33 105 / 0%) 80%,
+    rgb(1 33 105) 100%
+  );
+}
+
 .hero-homepage > div:first-child p {
   margin: 0;
   height: 100%;
@@ -66,6 +82,19 @@ main > .section.hero-homepage-container > .hero-homepage-wrapper {
   line-height: 1.15;
   max-width: 500px;
   margin: 0 0 16px;
+  padding-left: 18px;
+  border-left: 10px solid transparent;
+  border-image: linear-gradient(
+    to bottom,
+    rgb(0 103 160) 0%,
+    rgb(0 103 160) 25%,
+    rgb(0 153 204) 25%,
+    rgb(0 153 204) 50%,
+    rgb(186 12 47) 50%,
+    rgb(186 12 47) 75%,
+    rgb(220 36 31) 75%,
+    rgb(220 36 31) 100%
+  ) 1;
 }
 
 @media (width >= 900px) {
